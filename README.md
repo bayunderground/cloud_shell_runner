@@ -40,10 +40,20 @@ csr login work work-gcloud-config
 csr login personal personal-gcloud-config
 ```
 
-**Note:** This does not create the gcloud configuration. Create it first with:
+**Note:** This does not create the gcloud configuration. If you haven't set one up yet:
+
 ```bash
-gcloud config configurations create <name>
+# 1. Create a named configuration
+gcloud config configurations create work-account
+
+# 2. Activate it (make it the current config)
+gcloud config configurations activate work-account
+
+# 3. Login to your Google account (opens browser)
+gcloud auth login
 ```
+
+After these steps, `work-account` is a valid gcloud config name you can use with `csr login`.
 
 ### `csr run <nickname> <script-path> [-- <script-args>...]`
 
