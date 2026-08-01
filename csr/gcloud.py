@@ -1,16 +1,31 @@
 """Thin wrappers around gcloud subprocess calls."""
 
+import subprocess
+import sys
+
 
 def configuration_exists(name: str) -> bool:
-    """Check if a gcloud named configuration exists."""
-    # Placeholder for Step 2
-    raise NotImplementedError
+    """Check if a gcloud named configuration exists.
+
+    Returns True if the configuration exists, False otherwise.
+    """
+    result = subprocess.run(
+        ["gcloud", "config", "configurations", "describe", name],
+        capture_output=True,
+        text=True,
+    )
+    return result.returncode == 0
 
 
 def auth_login(config_name: str) -> None:
-    """Run gcloud auth login with the given configuration."""
-    # Placeholder for Step 2
-    raise NotImplementedError
+    """Run gcloud auth login with the given configuration.
+
+    This is interactive - lets stdio inherit so the browser flow works.
+    """
+    subprocess.run(
+        ["gcloud", "auth", "login", f"--configuration={config_name}"],
+        check=True,
+    )
 
 
 def scp_to_cloudshell(config_name: str, local_path: str, remote_filename: str) -> None:
