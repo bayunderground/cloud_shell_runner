@@ -59,3 +59,27 @@ def remove_pid(nickname: str) -> None:
     pid_file = os.path.join(RUNNING_DIR, f"{nickname}.pid")
     if os.path.exists(pid_file):
         os.remove(pid_file)
+
+
+def write_remote_pid(nickname: str, pid: int) -> None:
+    """Write remote PID to fixtures/running/<nickname>.remote_pid."""
+    os.makedirs(RUNNING_DIR, exist_ok=True)
+    pid_file = os.path.join(RUNNING_DIR, f"{nickname}.remote_pid")
+    with open(pid_file, "w") as f:
+        f.write(str(pid))
+
+
+def read_remote_pid(nickname: str) -> int | None:
+    """Read remote PID from fixtures/running/<nickname>.remote_pid, return None if missing."""
+    pid_file = os.path.join(RUNNING_DIR, f"{nickname}.remote_pid")
+    if not os.path.exists(pid_file):
+        return None
+    with open(pid_file, "r") as f:
+        return int(f.read().strip())
+
+
+def remove_remote_pid(nickname: str) -> None:
+    """Remove remote PID file if it exists."""
+    pid_file = os.path.join(RUNNING_DIR, f"{nickname}.remote_pid")
+    if os.path.exists(pid_file):
+        os.remove(pid_file)

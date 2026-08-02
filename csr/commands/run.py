@@ -33,9 +33,9 @@ def run(nickname: str, script_path: str, script_args: list[str]) -> None:
         print(f"Error uploading script: {e}", file=sys.stderr)
         sys.exit(1)
 
-    # 3. Build remote command string
+    # 3. Build remote command string (saves PID before executing)
     args_str = " ".join(script_args) if script_args else ""
-    remote_command = f"bash ~/{script_basename} {args_str}".strip()
+    remote_command = f"echo $$ > ~/.csr_pid_{nickname} && exec bash ~/{script_basename} {args_str}".strip()
 
     # 4. Create log file path
     runs_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "runs")

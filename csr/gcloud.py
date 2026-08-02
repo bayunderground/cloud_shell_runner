@@ -65,3 +65,46 @@ def launch_detached(config_name: str, remote_command: str, log_path: str) -> sub
             stderr=subprocess.STDOUT,
         )
     return process
+
+
+def get_remote_pid(config_name: str, nickname: str) -> int | None:
+    """Read the remote PID from Cloud Shell.
+
+    Returns the PID if found, None otherwise.
+    """
+    result = subprocess.run(
+        [
+            "gcloud",
+            "cloud-shell",
+            "ssh",
+            f"--configuration={config_name}",
+            f"--command=cat ~/.csr_pid_{nickname}",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode == 0 and result.stdout.strip():
+        try:
+            return int(result.stdout.strip())
+        except ValueError:
+            return None
+    return None
+
+
+def kill_remote_pid(config_name: str, nickname: str) -> bool:
+    """Kill the remote process on Cloud Shell.
+
+    Returns True if signal was sent, False otherwise.
+    """
+    result = subprocess.run(
+        [
+            "gcloud",
+            "cloud-shell",
+            "ssh",
+            f"--configuration={config_name}",
+            f"--command=kill $(cat ~/.csr_pid_{nickname}) 2>/dev/null; rm -f ~/.csr_pid_{nickname}",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    return result.returncode == 0
