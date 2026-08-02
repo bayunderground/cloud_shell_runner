@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "cloud-shell-runner"
+version = "0.1.0"
+description = "Launch scripts on Cloud Shell in the background and stop them on demand"
+requires-python = ">=3.10"
+
+[project.scripts]
+csr = "csr.cli:main"

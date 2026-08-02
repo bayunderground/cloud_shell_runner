@@ -8,25 +8,34 @@ A local CLI that launches scripts on Cloud Shell in the background and can stop 
 # Clone the repository
 git clone https://github.com/bayunderground/cloud_shell_runner.git
 cd cloud_shell_runner
+```
 
-# Install dependencies (if any)
-pip install -r requirements.txt
+### Option A: Run directly with Python (no install needed)
 
-# Make the CLI available
+```bash
+python3 -m csr.cli <command>
+```
+
+### Option B: Install with pip (recommended for regular use)
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -e .
+csr <command>  # Now available globally in this shell
 ```
 
 ## Quick Start
 
 ```bash
 # 1. Register a nickname for your gcloud config
-csr login my-account my-gcloud-config
+python3 -m csr.cli login my-account my-gcloud-config
 
 # 2. Run a script on Cloud Shell
-csr run my-account ./my_script.sh
+python3 -m csr.cli run my-account ./my_script.sh
 
 # 3. Stop the script
-csr stop my-account
+python3 -m csr.cli stop my-account
 ```
 
 ## Commands
@@ -36,8 +45,8 @@ csr stop my-account
 Register a memorable nickname for an existing gcloud configuration.
 
 ```bash
-csr login work work-gcloud-config
-csr login personal personal-gcloud-config
+python3 -m csr.cli login work work-gcloud-config
+python3 -m csr.cli login personal personal-gcloud-config
 ```
 
 **Note:** This does not create the gcloud configuration. If you haven't set one up yet:
@@ -60,8 +69,8 @@ After these steps, `work-account` is a valid gcloud config name you can use with
 Upload a script to Cloud Shell and run it in the background.
 
 ```bash
-csr run work ./deploy.sh production
-csr run personal ./backup.sh daily
+python3 -m csr.cli run work ./deploy.sh production
+python3 -m csr.cli run personal ./backup.sh daily
 ```
 
 The command returns immediately - the script runs in the background on Cloud Shell.
@@ -73,7 +82,7 @@ Output is logged to `runs/<nickname>_<timestamp>.log`.
 Stop a running script on Cloud Shell.
 
 ```bash
-csr stop work
+python3 -m csr.cli stop work
 ```
 
 This uses two mechanisms:
